@@ -1,4 +1,5 @@
 import re
+import math
 
 def le_assinatura():
     '''A funcao le os valores dos tracos linguisticos do modelo e devolve uma assinatura a ser comparada com os textos fornecidos'''
@@ -71,7 +72,14 @@ def n_palavras_diferentes(lista_palavras):
 
 def compara_assinatura(as_a, as_b):
     '''IMPLEMENTAR. Essa funcao recebe duas assinaturas de texto e deve devolver o grau de similaridade nas assinaturas.'''
-    pass
+    
+    somatorio = 0
+    
+    i = 0
+    while i < 6:
+        somatorio += math.fabs(as_a[i] - as_b[i])
+        
+    return somatorio / 6
 
 def calcula_assinatura(texto):
     '''IMPLEMENTAR. Essa funcao recebe um texto e deve devolver a assinatura do texto.'''
