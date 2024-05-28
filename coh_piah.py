@@ -148,8 +148,11 @@ def avalia_textos(textos, ass_cp):
         ass_txt = calcula_assinatura(texto)
         comparacoes.append(compara_assinatura(ass_cp, ass_txt))
 
-    for i in len(comparacoes):
+    i = 0
+    while i < len(comparacoes):
         if comparacoes[i] > mais_parecido:
             mais_parecido = i
+            
+        i += 1
     
     return mais_parecido
