@@ -75,8 +75,58 @@ def compara_assinatura(as_a, as_b):
 
 def calcula_assinatura(texto):
     '''IMPLEMENTAR. Essa funcao recebe um texto e deve devolver a assinatura do texto.'''
-    pass
+
+    lista_palavras = separa_palavras(texto)
+    lista_sentencas = separa_sentencas(texto)
+    lista_frases = separa_frases(texto)
+
+    palavras_total = len(lista_palavras)
+    sentencas_total = len(lista_sentencas)
+    frases_total = len(lista_frases)
+
+    palavras_tamanhos : int = 0
+    palavras_diferentes = n_palavras_diferentes(lista_palavras)
+    palavras_unicas = n_palavras_unicas(lista_palavras)
+
+    caracteres_total : int = 0
+    caracteres_frase : int = 0
+    caracteres_pontuacao = [".", ",", "!", "?", ":", ";"]
+
+    for palavra in lista_palavras:
+        palavras_tamanhos += len(palavra)
+
+        possui_pontuacao = False
+        for pontuacao in caracteres_pontuacao:
+            if pontuacao in palavra:
+                caracteres_total += len(palavra) - 1
+                possui_pontuacao = True
+                
+        if possui_pontuacao: continue
+
+        caracteres_total += len(palavra)
+
+    wal = palavras_tamanhos / palavras_total
+    print("Tamanho médio de palavra: " + str(wal))
+
+    ttr = palavras_diferentes / palavras_total
+    print("Relação Type-Token: " + str(ttr))
+
+    hlr = palavras_unicas / palavras_total
+    print("Relação Hapax Legomana: " + str(hlr))
+
+    sal = caracteres_total / sentencas_total
+    print("Tamanho médio da sentença: " + str(sal))
+
+    sac = frases_total / sentencas_total
+    print("Complexidade de sentença: " + str(sac))
+
+    pal = palavras_total / frases_total
+    print("Tamanho médio de frase: " + str(pal))
+
+    return [wal, ttr, hlr, sal, sac, pal]
 
 def avalia_textos(textos, ass_cp):
     '''IMPLEMENTAR. Essa funcao recebe uma lista de textos e uma assinatura ass_cp e deve devolver o numero (1 a n) do texto com maior probabilidade de ter sido infectado por COH-PIAH.'''
     pass
+
+calcula_assinatura("Eu amo o bolo que o Chico faz.")
