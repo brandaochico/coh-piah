@@ -1,6 +1,7 @@
 import re
 import math
 
+
 def le_assinatura():
     '''A funcao le os valores dos tracos linguisticos do modelo e devolve uma assinatura a ser comparada com os textos fornecidos'''
     print("Bem-vindo ao detector automático de COH-PIAH.")
@@ -15,17 +16,19 @@ def le_assinatura():
 
     return [wal, ttr, hlr, sal, sac, pal]
 
+
 def le_textos():
     '''A funcao le todos os textos a serem comparados e devolve uma lista contendo cada texto como um elemento'''
     i = 1
     textos = []
-    texto = input("Digite o texto " + str(i) +" (aperte enter para sair):")
+    texto = input("Digite o texto " + str(i) + " (aperte enter para sair):")
     while texto:
         textos.append(texto)
         i += 1
-        texto = input("Digite o texto " + str(i) +" (aperte enter para sair):")
+        texto = input("Digite o texto " + str(i) + " (aperte enter para sair):")
 
     return textos
+
 
 def separa_sentencas(texto):
     '''A funcao recebe um texto e devolve uma lista das sentencas dentro do texto'''
@@ -34,13 +37,16 @@ def separa_sentencas(texto):
         del sentencas[-1]
     return sentencas
 
+
 def separa_frases(sentenca):
     '''A funcao recebe uma sentenca e devolve uma lista das frases dentro da sentenca'''
     return re.split(r'[,:;]+', sentenca)
 
+
 def separa_palavras(frase):
     '''A funcao recebe uma frase e devolve uma lista das palavras dentro da frase'''
     return frase.split()
+
 
 def n_palavras_unicas(lista_palavras):
     '''Essa funcao recebe uma lista de palavras e devolve o numero de palavras que aparecem uma unica vez'''
@@ -58,6 +64,7 @@ def n_palavras_unicas(lista_palavras):
 
     return unicas
 
+
 def n_palavras_diferentes(lista_palavras):
     '''Essa funcao recebe uma lista de palavras e devolve o numero de palavras diferentes utilizadas'''
     freq = dict()
@@ -70,16 +77,19 @@ def n_palavras_diferentes(lista_palavras):
 
     return len(freq)
 
+
 def compara_assinatura(as_a, as_b):
     '''IMPLEMENTAR. Essa funcao recebe duas assinaturas de texto e deve devolver o grau de similaridade nas assinaturas.'''
-    
+
     somatorio = 0
-    
+
     i = 0
     while i < 6:
         somatorio += math.fabs(as_a[i] - as_b[i])
-        
+        i += 1
+
     return somatorio / 6
+
 
 def calcula_assinatura(texto):
     '''IMPLEMENTAR. Essa funcao recebe um texto e deve devolver a assinatura do texto.'''
@@ -92,12 +102,12 @@ def calcula_assinatura(texto):
     sentencas_total = len(lista_sentencas)
     frases_total = len(lista_frases)
 
-    palavras_tamanhos : int = 0
+    palavras_tamanhos: int = 0
     palavras_diferentes = n_palavras_diferentes(lista_palavras)
     palavras_unicas = n_palavras_unicas(lista_palavras)
 
-    caracteres_total : int = 0
-    caracteres_frase : int = 0
+    caracteres_total: int = 0
+    caracteres_frase: int = 0
     caracteres_pontuacao = [".", ",", "!", "?", ":", ";"]
 
     for palavra in lista_palavras:
@@ -108,33 +118,38 @@ def calcula_assinatura(texto):
             if pontuacao in palavra:
                 caracteres_total += len(palavra) - 1
                 possui_pontuacao = True
-                
+
         if possui_pontuacao: continue
 
         caracteres_total += len(palavra)
 
     wal = palavras_tamanhos / palavras_total
-    print("Tamanho médio de palavra: " + str(wal))
 
     ttr = palavras_diferentes / palavras_total
-    print("Relação Type-Token: " + str(ttr))
 
     hlr = palavras_unicas / palavras_total
-    print("Relação Hapax Legomana: " + str(hlr))
 
     sal = caracteres_total / sentencas_total
-    print("Tamanho médio da sentença: " + str(sal))
 
     sac = frases_total / sentencas_total
-    print("Complexidade de sentença: " + str(sac))
 
     pal = palavras_total / frases_total
-    print("Tamanho médio de frase: " + str(pal))
 
     return [wal, ttr, hlr, sal, sac, pal]
 
+
 def avalia_textos(textos, ass_cp):
     '''IMPLEMENTAR. Essa funcao recebe uma lista de textos e uma assinatura ass_cp e deve devolver o numero (1 a n) do texto com maior probabilidade de ter sido infectado por COH-PIAH.'''
-    pass
 
-calcula_assinatura("Eu amo o bolo que o Chico faz.")
+    comparacoes = []
+    mais_parecido = 0
+
+    for texto in textos:
+        ass_txt = calcula_assinatura(texto)
+        comparacoes.append(compara_assinatura(ass_cp, ass_txt))
+
+    for i in len(comparacoes):
+        if comparacoes[i] > mais_parecido:
+            mais_parecido = i
+    
+    return mais_parecido
