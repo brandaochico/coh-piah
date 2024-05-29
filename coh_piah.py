@@ -104,7 +104,13 @@ def calcula_assinatura(texto):
 
     lista_palavras = separa_palavras(texto)
     lista_sentencas = separa_sentencas(texto)
-    lista_frases = separa_frases(texto)
+    lista_frases = []
+    
+    for sentenca in lista_sentencas:
+        frases = separa_frases(sentenca)
+        
+        for frase in frases:
+            lista_frases.append(frase)
 
     palavras_total = len(lista_palavras)
     sentencas_total = len(lista_sentencas)
@@ -115,20 +121,20 @@ def calcula_assinatura(texto):
 
     caracteres_total = 0
     caracteres_pontuacao = [".", ",", ":", ";", "!", "?", "(", ")"]
-
-    # print(apenas_caracteres)
-    # print(lista_palavras)
-    # print(palavras_total)
-    
-    # print(palavras_diferentes)
-    print(sentencas_total)
+    caracteres_sentencas = 0
+    caracteres_frases = 0
     
     for palavra in lista_palavras:
         for char in palavra:
             if char not in caracteres_pontuacao:
                 caracteres_total += 1
-
-    print(caracteres_total)
+                
+    for char in texto:
+        if char != ".":
+            caracteres_sentencas += 1
+            
+    for frase in lista_frases:
+        caracteres_frases += len(frase)
 
     wal = caracteres_total / palavras_total
 
@@ -136,11 +142,11 @@ def calcula_assinatura(texto):
 
     hlr = palavras_unicas / palavras_total
 
-    sal = caracteres_total / sentencas_total
+    sal = caracteres_sentencas / sentencas_total
 
     sac = frases_total / sentencas_total
 
-    pal = palavras_total / frases_total
+    pal = caracteres_frases/ frases_total
 
     return [wal, ttr, hlr, sal, sac, pal]
 
@@ -169,12 +175,4 @@ def avalia_textos(textos, ass_cp):
 texto1 = "Num fabulário ainda por encontrar será um dia lida esta fábula: A uma bordadora dum país longínquo foi encomendado pela sua rainha que bordasse, sobre seda ou cetim, entre folhas, uma rosa branca. A bordadora, como era muito jovem, foi procurar por toda a parte aquela rosa branca perfeitíssima, em cuja semelhança bordasse a sua. Mas sucedia que umas rosas eram menos belas do que lhe convinha, e que outras não eram brancas como deviam ser. Gastou dias sobre dias, chorosas horas, buscando a rosa que imitasse com seda, e, como nos países longínquos nunca deixa de haver pena de morte, ela sabia bem que, pelas leis dos contos como este, não podiam deixar de a matar se ela não bordasse a rosa branca. Por fim, não tendo melhor remédio, bordou de memória a rosa que lhe haviam exigido. Depois de a bordar foi compará-la com as rosas brancas que existem realmente nas roseiras. Sucedeu que todas as rosas brancas se pareciam exactamente com a rosa que ela bordara, que cada uma delas era exactamente aquela. Ela levou o trabalho ao palácio e é de supor que casasse com o príncipe. No fabulário, onde vem, esta fábula não traz moralidade. Mesmo porque, na idade de ouro, as fábulas não tinham moralidade nenhuma."
 texto2 = "Senão quando, estando eu ocupado em preparar e apurar a minha invenção, recebi em cheio um golpe de ar; adoeci logo, e não me tratei. Tinha o emplasto no cérebro; trazia comigo a idéia fixa dos doidos e dos fortes. Via-me, ao longe, ascender do chão das turbas, e remontar ao Céu, como uma águia imortal, e não é diante de tão excelso espetáculo que um homem pode sentir a dor que o punge. No outro dia estava pior; tratei-me enfim, mas incompletamente, sem método, nem cuidado, nem persistência; tal foi a origem do mal que me trouxe à eternidade. Sabem já que morri numa sexta-feira, dia aziago, e creio haver provado que foi a minha invenção que me matou. Há demonstrações menos lúcidas e não menos triunfantes. Não era impossível, entretanto, que eu chegasse a galgar o cimo de um século, e a figurar nas folhas públicas, entre macróbios. Tinha saúde e robustez. Suponha-se que, em vez de estar lançando os alicerces de uma invenção farmacêutica, tratava de coligir os elementos de uma instituição política, ou de uma reforma religiosa. Vinha a corrente de ar, que vence em eficácia o cálculo humano, e lá se ia tudo. Assim corre a sorte dos homens."
 texto3 = "Voltei-me para ela; Capitu tinha os olhos no chão. Ergueu-os logo, devagar, e ficamos a olhar um para o outro... Confissão de crianças, tu valias bem duas ou três páginas, mas quero ser poupado. Em verdade, não falamos nada; o muro falou por nós. Não nos movemos, as mãos é que se estenderam pouco a pouco, todas quatro, pegando-se, apertando-se, fundindo-se. Não marquei a hora exata daquele gesto. Devia tê-la marcado; sinto a falta de uma nota escrita naquela mesma noite, e que eu poria aqui com os erros de ortografia que trouxesse, mas não traria nenhum, tal era a diferença entre o estudante e o adolescente. Conhecia as regras do escrever, sem suspeitar as do amar; tinha orgias de latim e era virgem de mulheres."
-# 
-print(calcula_assinatura(texto1))
-# 120.2
-print()
-print(calcula_assinatura(texto2))
-# 103.818
-print()
-print(calcula_assinatura(texto3))
-# 88.875
+
