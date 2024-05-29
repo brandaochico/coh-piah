@@ -50,9 +50,11 @@ def separa_palavras(frase):
 
 def n_palavras_unicas(lista_palavras):
     '''Essa funcao recebe uma lista de palavras e devolve o numero de palavras que aparecem uma unica vez'''
+    palavras_limpas = [remover_pontuacoes(palavra) for palavra in lista_palavras]
+    
     freq = dict()
     unicas = 0
-    for palavra in lista_palavras:
+    for palavra in palavras_limpas:
         p = palavra.lower()
         if p in freq:
             if freq[p] == 1:
@@ -67,8 +69,10 @@ def n_palavras_unicas(lista_palavras):
 
 def n_palavras_diferentes(lista_palavras):
     '''Essa funcao recebe uma lista de palavras e devolve o numero de palavras diferentes utilizadas'''
+    palavras_limpas = [remover_pontuacoes(palavra) for palavra in lista_palavras]
+    
     freq = dict()
-    for palavra in lista_palavras:
+    for palavra in palavras_limpas:
         p = palavra.lower()
         if p in freq:
             freq[p] += 1
@@ -78,17 +82,21 @@ def n_palavras_diferentes(lista_palavras):
     return len(freq)
 
 
+def remover_pontuacoes(palavra):
+    return ''.join(c for c in palavra if c.isalpha())
+
+
 def compara_assinatura(as_a, as_b):
     '''IMPLEMENTAR. Essa funcao recebe duas assinaturas de texto e deve devolver o grau de similaridade nas assinaturas.'''
 
-    somatorio = 0
+    similaridade = 0
 
     i = 0
     while i < 6:
-        somatorio += math.fabs(as_a[i] - as_b[i])
+        similaridade += math.fabs(as_a[i] - as_b[i])
         i += 1
 
-    return somatorio / 6
+    return similaridade / 6
 
 
 def calcula_assinatura(texto):
@@ -102,28 +110,27 @@ def calcula_assinatura(texto):
     sentencas_total = len(lista_sentencas)
     frases_total = len(lista_frases)
 
-    palavras_tamanhos: int = 0
     palavras_diferentes = n_palavras_diferentes(lista_palavras)
     palavras_unicas = n_palavras_unicas(lista_palavras)
 
-    caracteres_total: int = 0
-    caracteres_frase: int = 0
-    caracteres_pontuacao = [".", ",", "!", "?", ":", ";"]
+    caracteres_total = 0
+    caracteres_pontuacao = [".", ",", ":", ";", "!", "?", "(", ")"]
 
+    # print(apenas_caracteres)
+    # print(lista_palavras)
+    # print(palavras_total)
+    
+    # print(palavras_diferentes)
+    print(sentencas_total)
+    
     for palavra in lista_palavras:
-        palavras_tamanhos += len(palavra)
+        for char in palavra:
+            if char not in caracteres_pontuacao:
+                caracteres_total += 1
 
-        possui_pontuacao = False
-        for pontuacao in caracteres_pontuacao:
-            if pontuacao in palavra:
-                caracteres_total += len(palavra) - 1
-                possui_pontuacao = True
+    print(caracteres_total)
 
-        if possui_pontuacao: continue
-
-        caracteres_total += len(palavra)
-
-    wal = palavras_tamanhos / palavras_total
+    wal = caracteres_total / palavras_total
 
     ttr = palavras_diferentes / palavras_total
 
@@ -142,17 +149,32 @@ def avalia_textos(textos, ass_cp):
     '''IMPLEMENTAR. Essa funcao recebe uma lista de textos e uma assinatura ass_cp e deve devolver o numero (1 a n) do texto com maior probabilidade de ter sido infectado por COH-PIAH.'''
 
     comparacoes = []
-    mais_parecido = 0
 
     for texto in textos:
         ass_txt = calcula_assinatura(texto)
         comparacoes.append(compara_assinatura(ass_cp, ass_txt))
 
-    i = 0
+    i: int = 0
+    menor = 100
+
     while i < len(comparacoes):
-        if comparacoes[i] > mais_parecido:
-            mais_parecido = i
-            
+        if comparacoes[i] < menor:
+            menor = i + 1
+
         i += 1
-    
-    return mais_parecido
+
+    return menor
+
+
+texto1 = "Num fabulário ainda por encontrar será um dia lida esta fábula: A uma bordadora dum país longínquo foi encomendado pela sua rainha que bordasse, sobre seda ou cetim, entre folhas, uma rosa branca. A bordadora, como era muito jovem, foi procurar por toda a parte aquela rosa branca perfeitíssima, em cuja semelhança bordasse a sua. Mas sucedia que umas rosas eram menos belas do que lhe convinha, e que outras não eram brancas como deviam ser. Gastou dias sobre dias, chorosas horas, buscando a rosa que imitasse com seda, e, como nos países longínquos nunca deixa de haver pena de morte, ela sabia bem que, pelas leis dos contos como este, não podiam deixar de a matar se ela não bordasse a rosa branca. Por fim, não tendo melhor remédio, bordou de memória a rosa que lhe haviam exigido. Depois de a bordar foi compará-la com as rosas brancas que existem realmente nas roseiras. Sucedeu que todas as rosas brancas se pareciam exactamente com a rosa que ela bordara, que cada uma delas era exactamente aquela. Ela levou o trabalho ao palácio e é de supor que casasse com o príncipe. No fabulário, onde vem, esta fábula não traz moralidade. Mesmo porque, na idade de ouro, as fábulas não tinham moralidade nenhuma."
+texto2 = "Senão quando, estando eu ocupado em preparar e apurar a minha invenção, recebi em cheio um golpe de ar; adoeci logo, e não me tratei. Tinha o emplasto no cérebro; trazia comigo a idéia fixa dos doidos e dos fortes. Via-me, ao longe, ascender do chão das turbas, e remontar ao Céu, como uma águia imortal, e não é diante de tão excelso espetáculo que um homem pode sentir a dor que o punge. No outro dia estava pior; tratei-me enfim, mas incompletamente, sem método, nem cuidado, nem persistência; tal foi a origem do mal que me trouxe à eternidade. Sabem já que morri numa sexta-feira, dia aziago, e creio haver provado que foi a minha invenção que me matou. Há demonstrações menos lúcidas e não menos triunfantes. Não era impossível, entretanto, que eu chegasse a galgar o cimo de um século, e a figurar nas folhas públicas, entre macróbios. Tinha saúde e robustez. Suponha-se que, em vez de estar lançando os alicerces de uma invenção farmacêutica, tratava de coligir os elementos de uma instituição política, ou de uma reforma religiosa. Vinha a corrente de ar, que vence em eficácia o cálculo humano, e lá se ia tudo. Assim corre a sorte dos homens."
+texto3 = "Voltei-me para ela; Capitu tinha os olhos no chão. Ergueu-os logo, devagar, e ficamos a olhar um para o outro... Confissão de crianças, tu valias bem duas ou três páginas, mas quero ser poupado. Em verdade, não falamos nada; o muro falou por nós. Não nos movemos, as mãos é que se estenderam pouco a pouco, todas quatro, pegando-se, apertando-se, fundindo-se. Não marquei a hora exata daquele gesto. Devia tê-la marcado; sinto a falta de uma nota escrita naquela mesma noite, e que eu poria aqui com os erros de ortografia que trouxesse, mas não traria nenhum, tal era a diferença entre o estudante e o adolescente. Conhecia as regras do escrever, sem suspeitar as do amar; tinha orgias de latim e era virgem de mulheres."
+# 
+print(calcula_assinatura(texto1))
+# 120.2
+print()
+print(calcula_assinatura(texto2))
+# 103.818
+print()
+print(calcula_assinatura(texto3))
+# 88.875
